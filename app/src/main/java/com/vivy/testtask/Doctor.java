@@ -7,9 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Doctor {
 
-    @SerializedName("address")
     @Expose
+    @SerializedName("address")
     private String address;
+
     @SerializedName("email")
     @Expose
     private String email;

@@ -1,6 +1,7 @@
 
 package com.vivy.testtask;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +10,7 @@ public class DoctorsData {
 
     @SerializedName("doctors")
     @Expose
-    private List<Doctor> doctors = null;
+    private List<Doctor> doctors = new ArrayList<Doctor>();
     @SerializedName("lastKey")
     @Expose
     private String lastKey;

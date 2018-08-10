@@ -8,9 +8,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class DoctorsData {
 
+    // List of all the doctors
     @SerializedName("doctors")
     @Expose
     private List<Doctor> doctors = new ArrayList<Doctor>();
+
     @SerializedName("lastKey")
     @Expose
     private String lastKey;

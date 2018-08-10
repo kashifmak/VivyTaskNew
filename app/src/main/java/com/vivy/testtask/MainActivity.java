@@ -19,13 +19,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- *
- */
+
 public class MainActivity extends AppCompatActivity {
     Context context = this;
 
-    // define static variables
+    // Define static variables
     public static RecyclerView doctorsList;
     public static String doctorName;
     public static String doctorAddress;
@@ -40,12 +38,20 @@ public class MainActivity extends AppCompatActivity {
     Button searchButton;
     ImageView mic;
 
+    /**
+     * OnCreate calls when activity starts
+     *
+     * Get the name of the doctor to search by pressing the search button {@link #searchButton}
+     * with the help of API to find the doctor near you.
+     *
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // variables used to show the required information un the screen
+        // Variables used to show the required information on the screen
         doctorName =  getString(R.string.DownloaderName) ;
         doctorAddress = getString(R.string.DownloaderAddress);
         doctorPhone = getString(R.string.DownloaderPhone);
@@ -60,44 +66,58 @@ public class MainActivity extends AppCompatActivity {
         doctorsList = findViewById(R.id.docList);
         mic = findViewById(R.id.mic);
 
-        // to hide keyboard on starting the activity
+        // Hide keyboard on starting the activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        /**
+         * Binding onclick listener with the search button
+         */
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // to hide keyboard after pressing search button
+                // Hide keyboard after pressing search button
                 InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
-                // checking internet connectivity
+                // Checking internet connectivity
                 ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
                 if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-                    //Connected to Wifi network
+                    //'if' condition becomes true if connected to Wifi network
+
+                    // Creating the object of Downloader class
                     Downloader download = new Downloader();
+
+                    // Fetching the name of the doctor form search field
                     String doctorName = searchField.getText().toString();
 
-                    // to replace empty spaces from the text
+                    // Replace empty spaces from the text
                     doctorName = doctorName.replaceAll(" ", "%20");
 
-                    // to get the information of the doctor
+                    /**
+                     * Calls the downloadDoctorsData method of Downloader class to search for doctors near by
+                     *@param context
+                     *@param doctorName
+                     */
                     download.downloadDoctorsData(context, doctorName);
 
                 }
                 else {
-                    // to display toast message device is not connected to the internet
+                    // Display toast message device is not connected to the internet
                     Toast.makeText(context, getString(R.string.MainActivityToastNoInternet), Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        // speech to text input
+        /**
+         * Binding onclick listener with the Mic button to enable the user to give speech input
+         */
         mic.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
 
+                // Starting the speech recognizer to get the voice input
                 Intent input = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 input.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 input.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -112,11 +132,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Runs after finish the activity of listening the speech input
+     * @param requestCode request code send from the intent
+     * @param resultCode status of the activity
+     * @param data contains the data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // to display the spoken sentence in the edit text field on the screen
+        // Display the spoken sentence/word in the edit text field on the screen
         if (requestCode == 10 && data != null){
+
+            // Get the data
             ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             searchField.setText(result.get(0));
         }

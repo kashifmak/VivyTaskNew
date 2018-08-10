@@ -22,13 +22,21 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Custom list adapter to display images in the list
+ * Used recycler view which use the previous views of the list
+ * instead of creating new ones when we scroll to the bottom of the list
+ */
 public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder> {
 
     private Context context;
     private Doctor[] data;
 
-    // constructor
+    /**
+     * Parameterized constructor to pass parameters
+     * @param context
+     * @param data
+     */
     public listAdapter (Context context , Doctor[] data){
         this.context = context;
         this.data = data;
@@ -47,32 +55,32 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
     @Override
     public void onBindViewHolder(@NonNull final listViewHolder holder, int position) {
 
-        // doctor's data
+        // Doctor's data
         Doctor doctor = data[position];
 
-        // using string builder as it is mutable
+        // Used string builder as it is mutable
         StringBuilder infoOfDoctor = new StringBuilder();
 
-        // to get doctor's name
+        // Get doctor's name
         String docName = MainActivity.doctorName +" "+ doctor.getName() + "\n";
 
-        // to get doctor's address
+        // Get doctor's address
         String docAddress = MainActivity.doctorAddress+" " + doctor.getAddress() + "\n";
 
-        // to get doctor's phone no
+        // Get doctor's phone number
         String docPhone = MainActivity.doctorPhone+" "  + doctor.getPhoneNumber() + "\n";
 
-        // to get doctor's location picture
+        // Get doctor's location picture
         String docPhotoPlace = doctor.getPhotoId() + "\n";
 
         // To display ß in text, similarly for other special characters
         docAddress = docAddress.replaceAll("Ã\u009F", String.valueOf(Html.fromHtml ( "&#223" )));
 
-        // in case if phone no. is not available
+        // In case if phone no. is not available
         if (docPhone == null)
             docPhone = "Not found";
 
-        // appending the data to display on the screen
+        // Append the data to display on the screen
         infoOfDoctor.append(docName);
         infoOfDoctor.append(docAddress);
         infoOfDoctor.append(docPhone);
@@ -80,7 +88,10 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
 
         if (docPhotoPlace != null){
 
-            // url to download image of the loaction
+            /**
+             * URL to download image of the location
+             * Creates image request to download the images
+             */
             String urlForImage = "https://api.staging.uvita.eu/api/users/me/files/"+docPhotoPlace;
             ImageRequest imageRequest = new ImageRequest(urlForImage,
                     new Response.Listener<Bitmap>() {
@@ -91,7 +102,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
                     }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // if image is not available then show default image
+                    // If image is not available then show default image
                     holder.locationImage.setImageResource(R.drawable.icon);
                 }
             })
@@ -113,18 +124,22 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
         }
 
 
-       // To update UI with the information of the doctor
+       // Update UI with the information of the doctor
         holder.infoText.setText(infoOfDoctor.toString());
     }
 
-    // to get the length of the data i.e no.of doctors found
+    // Length of the data i.e no.of doctors found
     @Override
     public int getItemCount() {
         return data.length;
     }
 
+    /**
+     * View holder which includes the UI elements i.e image view to display image
+     * and text view to display the text information
+     */
     public class listViewHolder extends RecyclerView.ViewHolder{
-        // reference to ui elements
+        // Reference to UI elements
         ImageView locationImage;
         TextView infoText;
 

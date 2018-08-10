@@ -5,51 +5,70 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Serialized and map the data from JSON
+ * Creates Getters ans Setters
+ */
+
 public class Doctor {
 
-    @Expose
+
     @SerializedName("address")
+    @Expose
     private String address;
 
     @SerializedName("email")
     @Expose
     private String email;
+
     @SerializedName("highlighted")
     @Expose
     private Boolean highlighted;
+
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("lat")
     @Expose
-    private Double lat;
+    private Double lat; //latitude
+
     @SerializedName("lng")
     @Expose
-    private Double lng;
+    private Double lng; // longitude
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("openingHours")
     @Expose
     private List<String> openingHours = null;
+
     @SerializedName("phoneNumber")
     @Expose
     private String phoneNumber;
+
     @SerializedName("photoId")
     @Expose
     private String photoId;
+
     @SerializedName("rating")
     @Expose
     private Double rating;
+
     @SerializedName("reviewCount")
     @Expose
     private Integer reviewCount;
+
     @SerializedName("source")
     @Expose
     private String source;
+
     @SerializedName("specialityIds")
     @Expose
     private List<Integer> specialityIds = null;
+
     @SerializedName("website")
     @Expose
     private String website;

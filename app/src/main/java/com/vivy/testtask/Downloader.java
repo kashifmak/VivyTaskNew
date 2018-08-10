@@ -21,43 +21,67 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to fetch the data about the doctors after getting the access token
+ * {@Link #getAccessToken} Get the access token to access information using API
+ */
 public class Downloader extends Activity {
     public static String accessTokenImage;
     ProgressDialog dialog;
 
     public void downloadDoctorsData (Context context, String doctorName){
 
+        /**
+         * Calls the function to get access token
+         * @param context
+         * @param dostorName
+         */
         getAccessToken(context, doctorName);
 
     }
 
-    // to get access token for authorization
-
+    /**
+     * Get the access token to access the API
+     * @param context
+     * @param doctorName
+     */
     private void getAccessToken(final Context context, final String doctorName) {
+
+        // Progress dialog box
         dialog = new ProgressDialog(context);
         dialog.setMessage(MainActivity.DownloaderProgressDialogMessage);
         dialog.show();
 
-        // url to get access token
+        // URL to get access token
         String url = "https://auth.staging.vivy.com/oauth/token";
+
+        /**
+         * Creates POST request
+         * Headers : Access, Authorization and Content type
+         * Data: username and password
+         * parameters: grand type
+         *
+         */
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
+                // Creates JSON object to fetch the access token from the JSON response
                 JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
 
+                // Stores access token in variable
                 String accessToken = jobj.get("token_type").getAsString() + " " + jobj.get("access_token").getAsString();
 
-                // start the request to download doctor's data after getting the access token
+                // Start the request to download doctor's data after getting the access token
                 getDoctorsData(context, doctorName, accessToken);
 
-                // storing the access token to download the image of the location
+                // Storing the access token to download the image of the location
                 accessTokenImage = accessToken;
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // toast message to say download failed
+                // Message to inform the user about download failure
                 Toast.makeText(context, MainActivity.DownloaderToast, Toast.LENGTH_SHORT).show();
             }
         }){
@@ -84,11 +108,19 @@ public class Downloader extends Activity {
 
         };
 
+        // Add te request to the request queue
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
     }
 
-    // to download doctor's data
+    /**
+     * Get the data of the doctor from the API
+     * Data will be displayed based on some parameters like latitude, longitude
+     * location and sorted by the distance
+     * @param context
+     * @param doctorName
+     * @param accessToken
+     */
     private void getDoctorsData(final Context context, String doctorName, final String accessToken) {
         String lat = "52.534709";
         String lng = "13.3976972";
@@ -102,6 +134,10 @@ public class Downloader extends Activity {
 
         MainActivity.doctorsList.setLayoutManager(new LinearLayoutManager(context));
 
+        /**
+         * Creates GET request
+         * Headers: Authorization and Access
+         */
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -113,11 +149,12 @@ public class Downloader extends Activity {
                 Doctor[] doctors = doctorsData.getDoctors().toArray(new Doctor[0]);
 
                 if(doctors.length >0)
+                    // Populate the list with the retrieved information of the doctors
                     MainActivity.doctorsList.setAdapter(new listAdapter(context,doctors));
                 else {
                     MainActivity.doctorsList.setAdapter(new listAdapter(context,doctors));
 
-                    // toast message to say that "no results found"
+                    //Message to inform the user that no result is found for the provided information
                     Toast.makeText(context, MainActivity.TryAgainToast, Toast.LENGTH_SHORT).show();
                 }
 

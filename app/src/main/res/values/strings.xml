@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">TestTask</string>
+
+    <!--Main Activity Java-->
+    <string name="MainActivityToastWarning">Please enter doctor\'s name to search</string>
+    <string name="MainActivityToastNoInternet">Please connect to internet and try again</string>
+
+    <!--Main Activity Layout-->
+    <string name="MainActivityDocList">docList</string>
+    <string name="MainActivitySearch">search</string>
+    <string name="MainActivitySearchHint">Please enter doctor\'s name to search</string>
+
+    <!--Downloader Java-->
+    <string name="DownloaderUrl">https://api.myjson.com/bins/muz96</string>
+    <string name="DownloaderName">Name: </string>
+    <string name="DownloaderEmail">Email: </string>
+    <string name="DownloaderPhone">Phone: </string>
+    <string name="DownloaderAddress">Address: </string>
+    <string name="DownloaderProgressDialogMessage">Please wait...</string>
+    <string name="DownloaderToast">Download failed...</string>
+    <string name="tryAgainToast">Sorry no result found...\nplease try again</string>
+
+    <!--list Layout-->
+    <string name="listImageContentDes">Location</string>
+
+
+
+</resources>

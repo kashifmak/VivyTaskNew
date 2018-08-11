@@ -1,6 +1,7 @@
 package com.vivy.testtask;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,20 +57,21 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
     @Override
     public void onBindViewHolder(@NonNull final listViewHolder holder, int position) {
 
+        String urlForImage = "";
         // Doctor's data
-        Doctor doctor = data[position];
+        final Doctor doctor = data[position];
 
         // Used string builder as it is mutable
         StringBuilder infoOfDoctor = new StringBuilder();
 
         // Get doctor's name
-        String docName = MainActivity.doctorName +" "+ doctor.getName() + "\n";
+        String docName = "\n" + MainActivity.doctorName +" "+ doctor.getName() + "\n\n";
 
         // Get doctor's address
-        String docAddress = MainActivity.doctorAddress+" " + doctor.getAddress() + "\n";
+        String docAddress = MainActivity.doctorAddress+" " + doctor.getAddress() + "\n\n";
 
         // Get doctor's phone number
-        String docPhone = MainActivity.doctorPhone+" "  + doctor.getPhoneNumber() + "\n";
+        String docPhone = MainActivity.doctorPhone+" "  + doctor.getPhoneNumber() ;
 
         // Get doctor's location picture
         String docPhotoPlace = doctor.getPhotoId() + "\n";
@@ -92,7 +95,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
              * URL to download image of the location
              * Creates image request to download the images
              */
-            String urlForImage = "https://api.staging.uvita.eu/api/users/me/files/"+docPhotoPlace;
+            urlForImage = "https://api.staging.uvita.eu/api/users/me/files/"+docPhotoPlace;
             ImageRequest imageRequest = new ImageRequest(urlForImage,
                     new Response.Listener<Bitmap>() {
                         @Override
@@ -126,6 +129,26 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
 
        // Update UI with the information of the doctor
         holder.infoText.setText(infoOfDoctor.toString());
+
+        // Show more details of the doctor
+        final String finalUrlForImage = urlForImage;
+        holder.detailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Starting new activity to show more details of the doctor
+                Intent intent = new Intent(context, DoctorDetails.class);
+
+                // Start new activity
+                intent.putExtra("email", doctor.getEmail()); // Get doctor's email
+                intent.putExtra("openingHours", String.valueOf(doctor.getOpeningHours())); // Get doctor's opening hours
+                intent.putExtra("rating",String.valueOf(doctor.getRating())); // Get doctor's Rating
+                intent.putExtra("website",doctor.getWebsite()); // Get doctor's website
+                intent.putExtra("urlForImage", finalUrlForImage);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     // Length of the data i.e no.of doctors found
@@ -142,12 +165,14 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
         // Reference to UI elements
         ImageView locationImage;
         TextView infoText;
+        Button detailButton;
 
         public listViewHolder(View itemView) {
             super(itemView);
 
             locationImage = itemView.findViewById(R.id.image);
             infoText = itemView.findViewById(R.id.textView);
+            detailButton = itemView.findViewById(R.id.detailButton);
 
 
         }

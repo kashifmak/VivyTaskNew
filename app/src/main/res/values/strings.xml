@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">TestTask</string>
 
+
+    <string name="notFound">Not found</string>
+
     <!--Main Activity Java-->
     <string name="MainActivityToastWarning">Please enter doctor\'s name to search</string>
     <string name="MainActivityToastNoInternet">Please connect to internet and try again</string>
@@ -22,7 +25,8 @@
 
     <!--list Layout-->
     <string name="listImageContentDes">Location</string>
+    <string name="listDetailsButton">More details</string>
 
-
+    <!--details Layout-->
 
 </resources>

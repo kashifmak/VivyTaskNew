@@ -5,8 +5,8 @@ Features of the APP
 3. Internet connectivity check, and inform the users if not connected to internet.
 4. Detail screen to view more information of each doctor including (rating, email, website and opening hours)
 5. Allow the user to click the website link to visit the website of the doctor
-4. Some screenshots are added inside 'Screenshots' folder
-5. Added apk to download and install
+6. Some screenshots are added inside 'Screenshots' folder
+7. Added apk to download and install
 
 
 Note
